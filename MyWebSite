@@ -1,0 +1,221 @@
+#!/usr/bin/env bash
+
+#[*] Name of the script: MyWebSite
+#[*] Description: "Start a Web Server"
+#[*] Version: 2.0
+#[*] Author: JRIC2002
+#[*] Date of creation: 12/01/2019
+#[*] Date of last update: 30/04/2020
+
+#COLORS
+
+black='\033[1;30m'
+red='\033[1;31m'
+green='\033[1;32m'
+yellow='\033[1;33m'
+blue='\033[1;34m'
+magenta='\033[1;35m'
+cyan='\033[1;36m'
+white='\033[0m'
+
+function banner {
+
+#BANNER
+
+	printf "
+      $green  __  __    $white __        __   _   $blue ____  _ _
+      $green |  \/  |_   $white\ \      / /__| |__$blue/ ___|(_) |_ ___
+      $green | |\/| | | | $white\ \ /\ / / _ \ '_ $blue\___ \| | __/ _ *
+      $green | |  | | |_| |$white\ V  V /  __/ |_) |__$blue) | | ||  __/
+      $green |_|  |_|\__, | $white\_/\_/ \___|_.__/$blue\e ____/|_|\__\___|  v2.0
+              $green |___/$white
+
+             $yellow .:.:.$white Script encoded by: @JRIC2002 $yellow.:.:.$white
+           $yellow .:.:.$white Description: Start a Web Server $yellow.:.:.$white
+"
+
+	sleep 1
+
+}
+
+function disclaimer {
+
+	#DISCLAIMER
+	
+	setterm --background red
+	printf "
+  :: Disclaimer: Developers assume no liability and are not    ::  
+  :: responsible for any misuse or damage caused by MyWebSite  ::  "
+	setterm --background black
+	echo ""
+	echo ""
+	sleep 1
+
+}
+
+function opcion_1 {
+
+	#LOCALHOST
+
+	echo ""
+	printf "$green[$white*$green]$magenta Let's to configure it\n$white"
+	echo ""
+
+	printf "$cyan    [Set]$green Ip (Localhost) $white>>"
+	read -p " " ip
+	echo ""
+
+	printf "$cyan    [Set]$green Puerto(Ejemplo: 8888) $white>>"
+	read -p " " puerto
+	echo ""
+
+	printf "$cyan    [Set]$green Ruta de la Carpeta (Los archivos HTML, CSS, Javascript) $white>>"
+	read -p " " ruta
+	echo ""
+
+	#INICIANDO SERVIDOR PHP
+	
+	sleep 3
+	php -S $ip:$puerto -t $ruta
+	
+	#VOLVER AL MENU PRINCIPAL
+		
+	printf "Presiona$yellow ENTER$white para volver al Menu de Inicio..."
+	read -p ""
+	
+	clear
+	banner
+	disclaimer
+	opciones
+
+}
+
+function opcion_2 {
+
+	#RED LAN
+
+	echo ""
+	printf "$green[$white*$green]$magenta Let's to configure it\n$white"
+	echo ""
+
+	printf "$cyan    [Set]$green Ip (Ejemplo: 192.168.x.x) $white>>"
+	read -p " " ip
+	echo ""
+
+	printf "$cyan    [Set]$green Puerto (Ejemplo: 8888) $white>>"
+	read -p " " puerto
+	echo ""
+
+	printf "$cyan    [Set]$green Ruta de la Carpeta (Los archivos HTML, CSS, Javascript) $white>>"
+	read -p " " ruta
+	echo ""
+
+	#INICIANDO SERVIDOR PHP
+	
+	sleep 3
+	php -S $ip:$puerto -t $ruta
+	
+	#VOLVER AL MENU PRINCIPAL
+	
+	printf "Presiona$yellow ENTER$white para volver al Menu de Inicio..."
+	read -p ""
+
+	clear
+	banner
+	disclaimer
+	opciones
+
+}
+
+function opcion_3 {
+
+	#INTERNET
+	
+	echo ""
+	printf "$green[$white*$green]$magenta Let's to configure it\n$white"
+	echo ""
+
+	printf "$cyan    [Set]$green Ruta de la Carpeta (Los archivos HTML, CSS, Javascript) $white>>"
+	read -p " " ruta
+	echo ""
+
+	printf "$cyan    [Set]$green URL (Ejemplo: hacker) $white>>"
+	read -p " " url
+	echo ""
+
+	sleep 3
+
+	printf "$green[$white*$green]$yellow URL de tu Sitio Web:$white https://$url.serveo.net\n$white"
+	echo ""
+
+
+	#INICIANDO SERVIDOR PHP, SERVEO.NET
+	
+	sleep 2
+	printf "$green[$white*$green]$yellow Iniciando Servidor php, serveo.net...\n$white"
+	echo ""
+	
+	ssh -R $url:80:127.0.0.1:8888 serveo.net &
+	
+	php -S 127.0.0.1:8888 -t $ruta 
+	
+	#VOLVER AL MENU PRINCIPAL
+	
+	echo ""
+	printf "Presiona$yellow ENTER$white para volver al Menu de Inicio..."
+	read -p ""
+	
+	clear
+	banner
+	disclaimer
+	opciones
+
+}
+
+function opciones {
+
+	#OPCIONES
+
+	printf "$green[$white\e001$green]$yellow Localhost\n$white"		
+	printf "$green[$white\e002$green]$yellow Red LAN (Wifi)\n$white"
+
+	printf "$green[$white\e003$green]$yellow Internet (Fuera de una Red LAN)\n$white"
+
+	printf "$green[$white\e099$green]$yellow Exit\n$white"
+	echo ""
+	
+	printf "$green[$white\e0*$green]$green Choose an Option$white >>"
+
+	read -p " " opcion
+	
+	if [ $opcion = "01" -o $opcion = "1" ]; then
+		clear 
+		banner
+		opcion_1
+	elif [ $opcion = "02" -o $opcion = "2" ]; then
+		clear
+		banner
+		opcion_2
+	elif [ $opcion = "03" -o $opcion = "3" ]; then
+		clear 
+		banner
+		opcion_3
+	elif [ $opcion = "exit" -o $opcion = "99" ]; then
+		echo ""
+		printf "$red                            Bye! \n$white"
+		echo ""
+		exit
+	else 
+		clear 
+		banner
+		disclaimer
+		opciones
+	fi
+
+}
+
+banner
+disclaimer
+opciones
+
+
